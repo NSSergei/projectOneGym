@@ -31,13 +31,17 @@ public class UserService {
         return response;
     }
 
+    public Optional<User> getUserById(long id) {
+        return userRepository.findById(id);
+    }
+
+    public void deleteUserById(long id) {
+        userRepository.deleteById(id);
+    }
+
     private User toMaptoUser(UserCreateRequest userCreateRequest) {
         return new User(userCreateRequest.name(), userCreateRequest.last_name(),
                 userCreateRequest.email(),userCreateRequest.pass(), userCreateRequest.role());
-    }
-
-    public Optional<User> getUserById(long id) {
-        return userRepository.findById(id);
     }
 
 }

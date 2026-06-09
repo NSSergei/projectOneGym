@@ -1,4 +1,4 @@
-package project.model;
+/*package project.model;
 
 import jakarta.validation.constraints.NegativeOrZero;
 import jakarta.validation.constraints.NotBlank;
@@ -19,3 +19,4 @@ public class Workout {
     @PositiveOrZero(message = "price cant be negative")
     int price;
 }
+*/

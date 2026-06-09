@@ -1,4 +1,4 @@
-package project.model;
+/*package project.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,3 +22,4 @@ public class Booking {
     @NotBlank(message = "Create cant be null")
     LocalDateTime createdAt;
 }
+*/

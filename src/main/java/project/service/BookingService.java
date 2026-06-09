@@ -1,4 +1,4 @@
-package project.service;
+/*package project.service;
 
 import org.springframework.stereotype.Service;
 import project.model.Booking;
@@ -18,7 +18,8 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    /*public Booking creatBooking() {
+    public Booking creatBooking() {
 
-    }*/
+    }
 }
+*/

@@ -1,4 +1,4 @@
-package project.service;
+/*package project.service;
 
 import org.springframework.stereotype.Service;
 import project.model.Workout;
@@ -22,3 +22,4 @@ public class WorkoutService {
         return workoutRepository.save(workout);
     }
 }
+*/

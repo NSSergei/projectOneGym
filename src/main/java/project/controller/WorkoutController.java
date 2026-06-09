@@ -1,4 +1,4 @@
-package project.controller;
+/*package project.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,3 +21,4 @@ public class WorkoutController {
     }
 
 }
+*/

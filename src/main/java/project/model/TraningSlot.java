@@ -1,4 +1,4 @@
-package project.model;
+/*package project.model;
 
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
@@ -18,4 +18,4 @@ public class TraningSlot {
     LocalTime startTime;
     LocalTime endTime;
     int capacity;
-}
+}*/

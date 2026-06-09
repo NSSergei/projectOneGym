@@ -1,5 +1,6 @@
 package project.model;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +10,11 @@ import lombok.ToString;
 @Data
 @ToString
 @RequiredArgsConstructor
+@Entity
+@Table(name = "users")
 public class User {
-    @NotEmpty
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     //@NotBlank(message = "Name cant be null")
     String name;
