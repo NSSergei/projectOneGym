@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public void deleteUserById(long id) {
-        userRepository.deleteById(id);
+        userRepository.deleteUserById(id);
     }
 
     private User toMaptoUser(UserCreateRequest userCreateRequest) {

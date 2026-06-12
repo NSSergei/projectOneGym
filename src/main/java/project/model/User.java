@@ -10,6 +10,7 @@ import lombok.ToString;
 @Data
 @ToString
 @RequiredArgsConstructor
+
 @Entity
 @Table(name = "users")
 public class User {
