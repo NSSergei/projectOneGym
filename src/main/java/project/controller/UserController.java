@@ -10,7 +10,6 @@ import project.model.User;
 import project.service.UserService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,12 +29,25 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable long id) {
+    public User getUserById(@PathVariable long id) {
         return userService.getUserById(id);
     }
+
+    @GetMapping("/{email}")
+    public User getUserByEmail(@PathVariable String email) {
+        return userService.findUserByEmail(email);
+    }
+
+    @PutMapping
+    public User updateUser(@RequestBody User user) {
+        return userService.updateUser(user);
+    }
+
 
     @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable long id) {
         userService.deleteUserById(id);
     }
+
+
 }

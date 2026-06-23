@@ -30,8 +30,13 @@ public class WorkoutController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Workout> getWorkoutById(@PathVariable long id) {
+    public Workout getWorkoutById(@PathVariable long id) {
         return workoutService.getWorkoutById(id);
+    }
+
+    @PutMapping
+    public void  updateWorkout(@RequestBody Workout workout) {
+        workoutService.updateWorkout(workout);
     }
 
     @DeleteMapping("/{id}")

@@ -1,4 +1,7 @@
 package project.dto;
 
-public record UserLoginRequest() {
+import jakarta.validation.constraints.NotBlank;
+
+public record UserLoginRequest(@NotBlank String email, @NotBlank String pass) {
+
 }
