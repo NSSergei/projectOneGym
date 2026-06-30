@@ -1,5 +1,6 @@
 package project.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,12 +23,12 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public LoginResponseDto login(@RequestBody UserLoginRequest userLoginRequest) {
+    public LoginResponseDto login(@Valid @RequestBody UserLoginRequest userLoginRequest) {
         return authService.login(userLoginRequest);
     }
 
     @PostMapping("/register")
-    public LoginResponseDto register(@RequestBody UserCreateRequest userCreateRequest) {
+    public LoginResponseDto register(@Valid  @RequestBody UserCreateRequest userCreateRequest) {
         return authService.register(userCreateRequest);
     }
 }

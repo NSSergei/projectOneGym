@@ -1,7 +1,8 @@
 package project.service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 import project.model.User;
@@ -18,15 +19,48 @@ import java.util.Date;
 @Service
 public class JwtService {
     private final String secret = "aEkxNVkA1xuz•••••••••••••••••••4NNIjrpgHb4K";
+    SecretKey key = Keys.hmacShaKeyFor(
+            secret.getBytes(StandardCharsets.UTF_8)
+    );
+
     final Duration accessTokenTtl = Duration.ofDays(14);
 
      public String generateToken(User user) {
         return Jwts.builder()
                 .setSubject(String.valueOf(user.getId()))
+                .claim("role",user.getRole().name())
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(Instant.now().plus(accessTokenTtl)))
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(key)
                 .compact();
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e ) {
+            return false;
+        }
+    }
+
+    public Long getUserIdFromToken(String token) {
+        if (!validateToken(token)) {
+            return 0L;
+        }
+        return Long.valueOf(parseClaims(token).getSubject());
+    }
+
+    public Claims parseClaims(String token) {
+         return Jwts.parser()
+                 .setSigningKey(key)
+                 .verifyWith(key)
+                 .build()
+                 .parseSignedClaims(token)
+                 .getPayload();
     }
 }
 

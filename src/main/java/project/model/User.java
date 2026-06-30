@@ -2,10 +2,7 @@ package project.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import project.enums.Role;
 
 
@@ -16,6 +13,9 @@ import project.enums.Role;
 @Entity
 @Table(name = "users")
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

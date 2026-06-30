@@ -27,20 +27,9 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    //написать для метода фильтер аутеиндентификации
     public List<User> getAllUsers() {
         return userRepository.findAll();
-    }
-
-    public User creatUser(UserCreateRequest userCreateRequest) {
-        if (userRepository.existsByEmail(userCreateRequest.email())) {
-            throw new ValidationException("Email есть в базе данных");
-        }
-
-        User response = toMaptoUser(userCreateRequest);
-
-        response.setPass(passwordEncoder.encode(response.getPass()));
-
-        return userRepository.save(response);
     }
 
     public User updateUser(User user) {

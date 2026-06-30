@@ -17,12 +17,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserCreateRequest userCreateRequest) {
-        User response = userService.creatUser(userCreateRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
     @GetMapping
     public List<User> getUsers() {
         return userService.getAllUsers();
@@ -48,6 +42,5 @@ public class UserController {
     public void deleteUserById(@PathVariable long id) {
         userService.deleteUserById(id);
     }
-
 
 }
