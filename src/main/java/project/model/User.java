@@ -8,7 +8,6 @@ import project.enums.Role;
 
 @Data
 @ToString
-@RequiredArgsConstructor
 
 @Entity
 @Table(name = "users")

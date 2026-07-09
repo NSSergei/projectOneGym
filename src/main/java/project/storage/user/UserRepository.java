@@ -1,26 +1,26 @@
-package project.storage.user;
+    package project.storage.user;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+    import org.springframework.data.jpa.repository.JpaRepository;
 
-import org.springframework.stereotype.Repository;
-import project.model.User;
+    import org.springframework.stereotype.Repository;
+    import project.model.User;
 
-import java.util.List;
-import java.util.Optional;
+    import java.util.List;
+    import java.util.Optional;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+    @Repository
+    public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findById(long id);
+        Optional<User> findById(long id);
 
-    boolean existsByEmail(String email);
+        boolean existsByEmail(String email);
 
-    boolean existsById(Long id);
+        boolean existsById(Long id);
 
-    List<User> findByBalanceGreaterThan(int balance);
+        List<User> findByBalanceGreaterThan(int balance);
 
-    void deleteUserById(long id);
+        void deleteUserById(long id);
 
-    Optional<User> findByEmail(String email);
+        Optional<User> findByEmail(String email);
 
-}
+    }
