@@ -75,6 +75,7 @@ public class UserService {
     private UserResponseDto toUserResponseDto(User user) {
         return new UserResponseDto(user.getName(),
                 user.getLast_name(),
-                user.getEmail());
+                user.getEmail(),
+                user.getRole());
     }
 }

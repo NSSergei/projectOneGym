@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/api/users")
 @Validated
 public class UserController {
     private final UserService userService;
@@ -30,7 +30,6 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    // @GetMapping("/email/{email}") нужно ли менять путь поиска по email, чтобы по id работал
     @GetMapping("/email/{email}")
     public UserResponseDto getUserByEmail(@PathVariable String email) {
         return userService.findUserByEmail(email);
@@ -40,7 +39,6 @@ public class UserController {
     public UserResponseDto updateUser(@Valid @RequestBody User user) {
         return userService.updateUser(user);
     }
-
 
     @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable long id) {

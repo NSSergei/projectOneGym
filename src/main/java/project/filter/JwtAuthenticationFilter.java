@@ -58,6 +58,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         //создать userDitails
         CustomUserDetails userDetails = new CustomUserDetails(user);
+
+        System.out.println("USER: " + user.getEmail());
+        System.out.println("DB ROLE: " + user.getRole());
+        System.out.println("AUTHORITIES: " + userDetails.getAuthorities());
         //UserDetails user = userDetailsService.loadUserByUsername(username);
         //нужнно ли использовать loadUserByUsername() или нет
 

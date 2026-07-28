@@ -1,25 +1,31 @@
-/*package project.model;
+package project.model;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import project.enums.BookingStatus;
 
 import java.time.LocalDateTime;
 
 @Data
 @ToString
+@Entity
+@Table(name = "booking")
 public class Booking {
-    @PositiveOrZero(message = "Id cant be negative")
-    long id;
-    @NotNull(message = "Slot Id cant be null")
-    int slotId;
-    @NotNull(message = "Slot Id cant be null")
-    int userId;
-    @NotBlank(message = "Status cant be null")
-    String status;
-    @NotBlank(message = "Create cant be null")
-    LocalDateTime createdAt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @ManyToOne(fetch = FetchType.LAZY) //
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "workout_id", nullable = false)
+    private Workout workout;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "booking_status",nullable = false)
+    private BookingStatus bookingStatus;
+    @Column(name = "creation_date",nullable = false) //означает что при добавлении/получении поле должно быть не
+    // нулевое
+    private LocalDateTime localDateTime;
 }
-*/

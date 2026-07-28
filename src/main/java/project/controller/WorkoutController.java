@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/workout")
+@RequestMapping("/api/workout")
 public class WorkoutController {
     private final WorkoutService workoutService;
 

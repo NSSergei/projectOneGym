@@ -51,7 +51,7 @@ public class JwtService {
                     .build()
                     .parseSignedClaims(token);
             return true;
-        } catch (JwtException | IllegalArgumentException e ) {
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }

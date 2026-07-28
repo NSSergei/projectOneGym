@@ -5,6 +5,9 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import project.enums.Role;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Data
 @ToString
@@ -19,17 +22,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    @NotBlank(message = "Name cant be null")
+    @Column(name = "user_name", nullable = false)
     String name;
-    @NotBlank(message = "Name cant be null")
+    @Column(name = "last_name", nullable = false)
     String last_name;
     @Email(message = "Email должна содержать символ @")
+    @Column(name = "email", nullable = false)
     String email;
-    @Size(min = 6, max = 20, message = "Password must have 6el - 20el size")
     String pass;
     @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
     Role role;
     @PositiveOrZero(message = "balance cant be negative")
+    @Column(name = "balance", nullable = false)
     int balance;
 
     public User(String name, String last_name, String email, String pass, Role role) {

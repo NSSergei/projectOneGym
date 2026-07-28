@@ -8,6 +8,7 @@ import project.model.User;
 import java.util.Collection;
 import java.util.List;
 
+
 public class CustomUserDetails implements UserDetails {
     private final User user;
 
@@ -17,7 +18,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(() -> "ROLE_USER");
+        return List.of(() -> "ROLE_" + user.getRole().name());
     }
 
     @Override
@@ -30,6 +31,9 @@ public class CustomUserDetails implements UserDetails {
         return this.user.getEmail();
     }
 
+    public Long getId() {
+        return this.user.getId();
+    }
     //-------Не изменялись--------
     @Override
     public boolean isAccountNonExpired() {
