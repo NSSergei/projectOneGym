@@ -1,6 +1,7 @@
     package project.controller;
 
     import lombok.RequiredArgsConstructor;
+    import org.springframework.security.core.Authentication;
     import org.springframework.web.bind.annotation.*;
     import project.dto.BookingCreateRequest;
     import project.dto.BookingResponseDto;
@@ -22,9 +23,12 @@
             return bookingService.getAllBookings();
         }
 
-        @PostMapping("/create/{workoutId}")
-        public BookingCreateRequest createBooking(@PathVariable long workoutId) {
-            return bookingService.createBooking(workoutId);
+        @PostMapping("/registration/{workoutId}")
+        public BookingCreateRequest createBooking(@PathVariable long workoutId,
+                                                  Authentication authentication) {
+            System.out.println("AUTH = " + authentication);
+            System.out.println("PRINCIPAL = " + authentication.getPrincipal());
+            return bookingService.registerForWorkout(workoutId);
         }
 
         @DeleteMapping("/{id}")

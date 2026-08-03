@@ -1,0 +1,9 @@
+CREATE  TABLE users(
+    id BIGSERIAL PRIMARY KEY,
+    user_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    pass VARCHAR(255) NOT NULL,
+    role VARCHAR(255) NOT NULL,
+    balance INT NOT NULL DEFAULT 0
+);

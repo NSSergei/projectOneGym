@@ -37,7 +37,7 @@ public class BookingService {
     }
     //User id нужно получать из Authentication
     //Workout id получаем из запроса (передача в аргументы)
-    public BookingCreateRequest createBooking(Long workoutId) {
+    public BookingCreateRequest registerForWorkout(Long workoutId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();

@@ -30,9 +30,14 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).hasRole("ADMINISTRATOR")
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/user/**").authenticated()
-                        .requestMatchers("/api/booking/**").hasRole("ADMINISTRATOR")
+                        .requestMatchers("/api/booking/{id}/status").hasRole("ADMINISTRATOR")
+                        .requestMatchers("/api/workout/**").hasRole("ADMINISTRATOR")
                         .anyRequest().authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

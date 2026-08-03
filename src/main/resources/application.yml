@@ -7,6 +7,15 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      #ddl-auto: update
+      ddl-auto: validate
       dialect: org.hibernate.dialect.PostgreSQLDialect  # добавляем явный диалект
     show-sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    #2 строки находящиеся нужны в случае если DB уже существует
+    #baseline-on-migrate: true
+    #baseline-version: 1
+    #----------------------------------------------------------#

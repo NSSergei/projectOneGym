@@ -1,4 +1,4 @@
-package project.сonfig;
+/*package project.сonfig;
 
 
 
@@ -42,5 +42,5 @@ public class AdminInitializer implements CommandLineRunner {
         }
     }
 }
-
+*/
 
