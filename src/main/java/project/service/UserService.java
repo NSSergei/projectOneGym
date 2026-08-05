@@ -48,6 +48,7 @@ public class UserService {
     public UserResponseDto getUserById(long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ValidationException("User with id=" + id + " not found"));
+
         return toUserResponseDto(user);
     }
 
@@ -61,6 +62,7 @@ public class UserService {
     public UserResponseDto findUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User with email=" + email + " not found"));
+
         return toUserResponseDto(user);
     }
 
@@ -78,4 +80,5 @@ public class UserService {
                 user.getEmail(),
                 user.getRole());
     }
+
 }

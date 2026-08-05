@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "workouts")
-public class Workout {
+public class Workout implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;

@@ -1,5 +1,8 @@
 package project.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import project.dto.WorkoutCreateRequest;
 import project.exception.NotFoundException;
@@ -21,15 +24,18 @@ public class WorkoutService {
         return workoutRepository.save(toMaptoWorkout(workoutCreateRequest));
     }
 
+    @Cacheable(value = "workouts")
     public List<Workout> getAllWorkout() {
         return workoutRepository.findAll();
     }
 
+    @Cacheable(value = "workout", key = "#id")
     public Workout getWorkoutById(long id) {
         return workoutRepository.findById(id)
                 .orElseThrow(() -> new ValidationException("Workout with id=" + id + " not found"));
     }
 
+    @CachePut(value = "workout", key = "#id") //?
     public Workout updateWorkout(Workout workout) {
         workoutRepository.findById(workout.getId())
                 .orElseThrow(() -> new NotFoundException("Workout not found"));
@@ -37,6 +43,7 @@ public class WorkoutService {
         return workoutRepository.save(workout);
     }
 
+    @CacheEvict(value = "workout", key = "#id")
     public void deleteWorkoutById(long id) {
         workoutRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Workout with id=" + id + " not found"));

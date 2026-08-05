@@ -6,13 +6,15 @@ import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import project.enums.BookingStatus;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @ToString
 @Entity
 @Table(name = "booking")
-public class Booking {
+public class Booking implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

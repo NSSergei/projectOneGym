@@ -5,6 +5,8 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import project.enums.Role;
 
+import java.io.Serializable;
+
 @Data
 @ToString
 
@@ -14,7 +16,8 @@ import project.enums.Role;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class User {
+public class User implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
