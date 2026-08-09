@@ -22,8 +22,8 @@ public class Booking implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workout_id", nullable = false)
-    private Workout workout;
+    @JoinColumn(name = "training_slot_id", nullable = false)
+    private TrainingSlot trainingSlot;
     @Enumerated(EnumType.STRING)
     @Column(name = "booking_status",nullable = false)
     private BookingStatus bookingStatus;

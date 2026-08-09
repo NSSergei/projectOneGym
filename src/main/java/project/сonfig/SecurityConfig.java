@@ -37,6 +37,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/user/**").authenticated()
                         .requestMatchers("/api/booking/{id}/status").hasRole("ADMINISTRATOR")
+                        .requestMatchers("/api/training/**").hasRole("ADMINISTRATOR")
+                        //в случае если я добавлю метод для добавления дополнительного COACH или замены/ передачи
+                        // занятия.
+                        //requestMatchers("/api/training/{id}/addCoach").hasRole("COACH")
                         .requestMatchers("/api/workout/**").hasRole("ADMINISTRATOR")
                         .anyRequest().authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

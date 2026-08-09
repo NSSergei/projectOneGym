@@ -19,7 +19,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     boolean existsById(Booking booking);
 
-    boolean existsByWorkout(Workout workout);
+    //boolean existsByWorkout(Workout workout);
 
     void deleteBookingById(long id);
 

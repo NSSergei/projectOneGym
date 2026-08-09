@@ -12,12 +12,13 @@ import project.dto.BookingResponseDto;
 import project.enums.BookingStatus;
 import project.exception.ValidationException;
 import project.model.Booking;
+import project.model.TrainingSlot;
 import project.model.User;
-import project.model.Workout;
 import project.security.user.CustomUserDetails;
 import project.storage.booking.BookingRepository;
+import project.storage.trainingSlot.TrainingRepository;
 import project.storage.user.UserRepository;
-import project.storage.workout.WorkoutRepository;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.List;
 public class BookingService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
-    private final WorkoutRepository workoutRepository;
+    private final TrainingRepository trainingRepository;
 
     public List<BookingResponseDto> getAllBookings() {
         return bookingRepository.findAll()
@@ -47,13 +48,13 @@ public class BookingService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Workout workout = workoutRepository.findById(workoutId)
-                .orElseThrow(() -> new RuntimeException("Workout not found"));
+         TrainingSlot trainingSlot = trainingRepository.findById(workoutId)
+                .orElseThrow(() -> new RuntimeException("Training not found"));
 
         Booking booking = new Booking();
 
         booking.setUser(user);
-        booking.setWorkout(workout);
+        booking.setTrainingSlot(trainingSlot);
         booking.setBookingStatus(BookingStatus.ACTIVE);
         booking.setLocalDateTime(LocalDateTime.now());
 
@@ -102,12 +103,12 @@ public class BookingService {
     }
 
     public BookingResponseDto toBookingResponseDto(Booking booking) {
-        return new BookingResponseDto(booking.getId(), booking.getUser().getId(), booking.getWorkout().getId(),
+        return new BookingResponseDto(booking.getId(), booking.getUser().getId(), booking.getTrainingSlot().getId(),
                 booking.getBookingStatus());
     }
 
     public BookingCreateRequest toBookingCreateDto(Booking booking) {
-        return new BookingCreateRequest(booking.getId(), booking.getUser().getId(), booking.getWorkout().getId(),
+        return new BookingCreateRequest(booking.getId(), booking.getUser().getId(), booking.getTrainingSlot().getId(),
                 booking.getLocalDateTime());
     }
 }
