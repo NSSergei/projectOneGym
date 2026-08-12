@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-public record BookingCreateRequest(@NotBlank long slotId, @NotNull long userId, @NotNull long workoutId,
+public record BookingCreateRequest(@NotBlank long slotId, @NotNull long userId, @NotNull long trainingId,
                                    @NotBlank LocalDateTime localDateTime) {
 
 }

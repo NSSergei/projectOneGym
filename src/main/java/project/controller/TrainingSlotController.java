@@ -3,6 +3,7 @@ package project.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import project.dto.TrainingResponseAllSlotsDto;
 import project.model.TrainingSlot;
 import project.service.TrainingSlotService;
 
@@ -12,15 +13,15 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/training")
 public class TrainingSlotController {
-    TrainingSlotService trainingSlotService;
+    private final TrainingSlotService trainingSlotService;
 
     @GetMapping
-    public List<TrainingSlot> getTraining() {
-        return trainingSlotService.getAllTrainingSlots();
+    public List<TrainingResponseAllSlotsDto> getTraining() {
+        return trainingSlotService.toTrainingResponseDtoList();
     }
 
     @PostMapping
-    public TrainingSlot addTrainingSlot(@Valid @RequestBody TrainingSlot trainingSlot) {
+    public TrainingSlot creatTrainingSlot(@Valid @RequestBody TrainingSlot trainingSlot) {
         return trainingSlotService.createTraining(trainingSlot);
     }
 

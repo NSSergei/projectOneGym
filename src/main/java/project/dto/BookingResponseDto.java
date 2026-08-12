@@ -6,5 +6,5 @@ import project.enums.BookingStatus;
 
 
 public record BookingResponseDto(@NotNull long bookingId, @NotNull long userId,
-                                 @NotNull long workoutId, @NotBlank BookingStatus bookingStatus) {
+                                 @NotNull long trainingId, @NotBlank BookingStatus bookingStatus) {
 }

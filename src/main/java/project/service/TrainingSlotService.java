@@ -1,11 +1,10 @@
 package project.service;
 
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import project.dto.TrainingResponseAllSlotsDto;
 import project.enums.Role;
 import project.exception.ValidationException;
-import project.model.Booking;
 import project.model.TrainingSlot;
 import project.model.User;
 import project.model.Workout;
@@ -29,16 +28,18 @@ public class TrainingSlotService {
     }
 
     public TrainingSlot createTraining(TrainingSlot trainingSlot) {
-        userRepository.findById(trainingSlot.getCoach().getId())
+        User coach = userRepository.findById(trainingSlot.getCoach().getId())
                 .orElseThrow(() -> new ValidationException("Coach не существует"));
 
-        if (!trainingSlot.getCoach().getRole().equals(Role.COACH)) {
+        if (!Role.COACH.equals(coach.getRole())) {
             throw new  ValidationException("Ошибка роли");
         }
 
-        workoutRepository.findById(trainingSlot.getWorkout().getId())
+        Workout workout = workoutRepository.findById(trainingSlot.getWorkout().getId())
                 .orElseThrow(() -> new ValidationException("Тренировка не существует"));
 
+        trainingSlot.setCoach(coach);
+        trainingSlot.setWorkout(workout);
         return trainingRepository.save(trainingSlot);
     }
 
@@ -58,7 +59,25 @@ public class TrainingSlotService {
         trainingRepository.deleteById(id);
     }
 
-    public List<TrainingSlot> getAllTrainingSlots() {
-        return trainingRepository.findAll();
+    public List<TrainingResponseAllSlotsDto> toTrainingResponseDtoList() {
+        return trainingRepository.findAll()
+                .stream()
+                .map(this::toTrainingResponseDto)
+                .toList();
+    }
+
+    public TrainingResponseAllSlotsDto toTrainingResponseDto(TrainingSlot trainingSlot) {
+        return new TrainingResponseAllSlotsDto(
+                trainingSlot.getId(),
+                trainingSlot.getWorkout().getName(),
+                trainingSlot.getWorkout().getDescription(),
+                trainingSlot.getWorkout().getPrice(),
+                trainingSlot.getCoach().getName(),
+                trainingSlot.getCoach().getLast_name(),
+                trainingSlot.getCoach().getRole().name(),
+                trainingSlot.getStartTime(),
+                trainingSlot.getEndTime(),
+                trainingSlot.getCapacity()
+        );
     }
 }
