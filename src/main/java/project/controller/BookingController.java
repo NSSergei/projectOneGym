@@ -41,6 +41,12 @@
             return bookingService.updateBooking(booking);
         }
 
+        @PatchMapping("/{trainingSlotId}/cancel")
+        public void cancelledBookingStatus(@PathVariable long trainingSlotId,
+                                        @RequestBody String reson) {
+            bookingService.cancelBookingStatus(trainingSlotId, reson);
+        }
+
         @PatchMapping("/{id}/status")
         public BookingResponseDto changeBookingStatus(@PathVariable long id,
                                                       @RequestBody BookingStatus bookingStatus) {

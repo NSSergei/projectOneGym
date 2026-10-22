@@ -28,6 +28,7 @@ public class User implements Serializable {
     @Email(message = "Email должна содержать символ @")
     @Column(name = "email", nullable = false)
     String email;
+    @Column(name = "pass", nullable = false)
     String pass;
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)

@@ -1,6 +1,8 @@
 package project.enums;
 
 public enum BookingStatus {
-    ACTIVE,
-    CANCELED;
+    CREATED,
+    PENDING,
+    CANCELLED,
+    FAILED;
 }

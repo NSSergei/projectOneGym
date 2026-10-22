@@ -3,7 +3,6 @@ package project.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
 import project.enums.BookingStatus;
 
 import java.io.Serializable;
