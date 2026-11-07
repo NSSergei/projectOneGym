@@ -1,0 +1,98 @@
+{
+  "annotations": { "list": [] },
+  "editable": false,
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "gym-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "reqps" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "id": 1,
+      "targets": [{ "expr": "sum(rate(http_server_requests_seconds_count{application=\"gym\"}[5m])) by (uri, method, status)", "legendFormat": "{{method}} {{uri}} {{status}}", "refId": "A" }],
+      "title": "HTTP request rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "gym-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "id": 2,
+      "targets": [{ "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{application=\"gym\"}[5m])) by (le, uri))", "legendFormat": "{{uri}} p95", "refId": "A" }],
+      "title": "HTTP latency p95",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "gym-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "percentunit" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "id": 3,
+      "targets": [{ "expr": "sum(rate(http_server_requests_seconds_count{application=\"gym\",status=~\"5..\"}[5m])) / clamp_min(sum(rate(http_server_requests_seconds_count{application=\"gym\"}[5m])), 1)", "legendFormat": "5xx ratio", "refId": "A" }],
+      "title": "Server error ratio",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "gym-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "id": 4,
+      "targets": [{ "expr": "sum(hikaricp_connections_active{application=\"gym\"})", "legendFormat": "Active DB connections", "refId": "A" }],
+      "title": "Database pool activity",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "gym-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "id": 5,
+      "targets": [{ "expr": "pg_stat_activity_count", "legendFormat": "{{state}}", "refId": "A" }],
+      "title": "PostgreSQL sessions",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "gym-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "bytes" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "id": 6,
+      "targets": [{ "expr": "redis_memory_used_bytes", "legendFormat": "Redis memory", "refId": "A" }],
+      "title": "Redis memory use",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "gym-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 },
+      "id": 7,
+      "targets": [{ "expr": "rabbitmq_queue_messages_ready", "legendFormat": "{{queue}} ready", "refId": "A" }],
+      "title": "RabbitMQ ready messages by queue",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "gym-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 24 },
+      "id": 8,
+      "targets": [{ "expr": "up{job=~\"gym-api|postgres|redis|rabbitmq\"}", "legendFormat": "{{job}}", "refId": "A" }],
+      "title": "Exporter availability",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "gym-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "ops" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 32 },
+      "id": 9,
+      "targets": [
+        { "expr": "sum(rate(gym_bookings_created_total[5m]))", "legendFormat": "Created", "refId": "A" },
+        { "expr": "sum(rate(gym_bookings_cancelled_total[5m]))", "legendFormat": "Cancelled", "refId": "B" },
+        { "expr": "sum(rate(gym_bookings_rejected_total[5m]))", "legendFormat": "Rejected", "refId": "C" }
+      ],
+      "title": "Booking activity",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "15s",
+  "schemaVersion": 39,
+  "tags": ["gym", "spring-boot"],
+  "time": { "from": "now-1h", "to": "now" },
+  "title": "Gym API Overview",
+  "uid": "gym-api-overview",
+  "version": 1
+}

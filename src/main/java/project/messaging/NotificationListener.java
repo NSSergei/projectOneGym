@@ -1,32 +1,26 @@
 package project.messaging;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class NotificationListener {
 
     @RabbitListener(queues = "booking.created.queue")
     public void handleBookingCreated(BookingCreatedEvent event) {
-        System.out.println("Создана новая запись: " + event +
-                " id записи: " + event.bookingId() +
-                " id пользователя: " + event.userId() +
-                " id тренировки " + event.trainingSlotId());
+        log.info("Booking created: bookingId={}, trainingSlotId={}", event.bookingId(), event.trainingSlotId());
     }
 
     @RabbitListener(queues = "booking.cancelled.queue")
     public void handleBookingCancelled(BookingCancelledEvent event) {
-        System.out.println("Уведомление запись отменена: " + event +
-                " id записи: " + event.bookingId() +
-                " Причина :" + event.reason());
+        log.info("Booking cancelled: bookingId={}", event.bookingId());
     }
 
     @RabbitListener(queues = "booking.status.changed.queue")
     public void handleBookingStatusChanged(BookingStatusChangedEvent event) {
-        System.out.println("Уведомление стутус записи изменен " + event +
-                " id записи " + event.bookingId() +
-                " изменен с : " + event.oldStatus() +
-                " на : " + event.newStatus()
-        );
+        log.info("Booking status changed: bookingId={}, oldStatus={}, newStatus={}",
+                event.bookingId(), event.oldStatus(), event.newStatus());
     }
 }

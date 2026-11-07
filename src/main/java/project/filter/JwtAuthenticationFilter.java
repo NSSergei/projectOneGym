@@ -2,11 +2,9 @@ package project.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -17,7 +15,6 @@ import project.service.JwtService;
 import project.storage.user.UserRepository;
 
 import java.io.IOException;
-import java.net.http.HttpHeaders;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -33,9 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
     throws ServletException, IOException {
-        System.out.println("JWT FILTER START");
         String header = request.getHeader("Authorization");
-        System.out.println("HEADER = " + header);
 
         if (header == null || !header.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -54,16 +49,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
         //проверить пользователя по данному id
-        User user = userRepository.findById(idToken)
-                .orElseThrow(() -> new RuntimeException("User or Password not found"));
+        User user = userRepository.findById(idToken).orElse(null);
+        if (user == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
 
 
         //создать userDitails
         CustomUserDetails userDetails = new CustomUserDetails(user);
 
-        System.out.println("USER: " + user.getEmail());
-        System.out.println("DB ROLE: " + user.getRole());
-        System.out.println("AUTHORITIES: " + userDetails.getAuthorities());
         //UserDetails user = userDetailsService.loadUserByUsername(username);
         //нужнно ли использовать loadUserByUsername() или нет
 
@@ -77,7 +72,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         //заполнить security context
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println("AUTH SET = " + authentication);
         filterChain.doFilter(request, response);
     }
 }

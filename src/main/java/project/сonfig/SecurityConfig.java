@@ -30,7 +30,8 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api-docs/**",
+                        .requestMatchers("/actuator/health/**", "/actuator/prometheus").permitAll()
+                        .requestMatchers("/docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).hasRole("ADMINISTRATOR")
@@ -43,7 +44,10 @@ public class SecurityConfig {
                         //requestMatchers("/api/training/{id}/addCoach").hasRole("COACH")
                         .requestMatchers("/api/workout/**").hasRole("ADMINISTRATOR")
                         .anyRequest().authenticated()
-                ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                )
+                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(
+                        (request, response, exception) -> response.sendError(401)))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

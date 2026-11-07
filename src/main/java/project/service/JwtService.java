@@ -19,7 +19,6 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    //@Value("${jwt.secret}") String secret;
     private final SecretKey key;
     final Duration accessTokenTtl = Duration.ofDays(14);
 
@@ -29,17 +28,12 @@ public class JwtService {
         );
     }
 
-    /*SecretKey key = Keys.hmacShaKeyFor(
-            secret.getBytes(StandardCharsets.UTF_8)
-    );*/
-
-
      public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(String.valueOf(user.getId()))
+                .subject(String.valueOf(user.getId()))
                 .claim("role",user.getRole().name())
-                .setIssuedAt(new Date())
-                .setExpiration(Date.from(Instant.now().plus(accessTokenTtl)))
+                .issuedAt(new Date())
+                .expiration(Date.from(Instant.now().plus(accessTokenTtl)))
                 .signWith(key)
                 .compact();
     }
@@ -65,23 +59,9 @@ public class JwtService {
 
     public Claims parseClaims(String token) {
          return Jwts.parser()
-                 .setSigningKey(key)
                  .verifyWith(key)
                  .build()
                  .parseSignedClaims(token)
                  .getPayload();
     }
 }
-
-/*У тебя:
-.signWith(SignatureAlgorithm.HS256, secret)
-
-Это старый API JJWT.
-В новых версиях обычно делают:
-
-SecretKey key = Keys.hmacShaKeyFor(
-        secret.getBytes(StandardCharsets.UTF_8)
-);
-
-.signWith(key)
-*/

@@ -11,15 +11,11 @@
     @Repository
     public interface UserRepository extends JpaRepository<User, Long> {
 
-        Optional<User> findById(long id);
-
         boolean existsByEmail(String email);
 
         boolean existsById(Long id);
 
         List<User> findByBalanceGreaterThan(int balance);
-
-        void deleteUserById(long id);
 
         Optional<User> findByEmail(String email);
 

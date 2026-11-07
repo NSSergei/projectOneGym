@@ -49,16 +49,12 @@ public class AuthService {
     }
 
     public LoginResponseDto login(UserLoginRequest userLoginRequest) {
-        System.out.println("LOGIN START");
-
         User user = userRepository.findByEmail(userLoginRequest.email())
                     .orElseThrow(() -> new ValidationException ("invalide email or password"));
 
         if (!passwordEncoder.matches(userLoginRequest.pass(), user.getPass())) {
             throw new ValidationException("invalide email or password");
         }
-
-        System.out.println("PASSWORD OK");
 
         String token = jwtService.generateToken(user);
 

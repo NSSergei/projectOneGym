@@ -56,7 +56,7 @@ public class UserService {
         userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with id=" + id + " not found"));
 
-        userRepository.deleteUserById(id);
+        userRepository.deleteById(id);
     }
 
     public UserResponseDto findUserByEmail(String email) {
