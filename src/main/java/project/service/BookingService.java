@@ -163,7 +163,8 @@ public class BookingService {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ValidationException("Booking not found"));
 
-        if(booking.getBookingStatus().equals(bookingStatus)) {
+        BookingStatus oldStatus = booking.getBookingStatus();
+        if(oldStatus.equals(bookingStatus)) {
             throw new ValidationException("Similar status");
         }
 
@@ -176,7 +177,7 @@ public class BookingService {
                 booking.getId(),
                 booking.getUser().getId(),
                 booking.getTrainingSlot().getWorkout().getId(),
-                booking.getBookingStatus(),
+                oldStatus,
                 bookingStatus,
                 LocalDateTime.now()
         );

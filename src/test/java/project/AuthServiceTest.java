@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import project.dto.UserCreateRequest;
+import project.dto.UserLoginRequest;
 import project.enums.Role;
 import project.exception.ValidationException;
 import project.model.User;
@@ -57,5 +58,37 @@ class AuthServiceTest {
 
         assertThatThrownBy(() -> authService.register(request))
                 .isInstanceOf(ValidationException.class);
+    }
+
+    @Test
+    void loginReturnsTokenForMatchingPassword() {
+        User user = User.builder().id(12L).email("test@example.com").pass("encoded-password").build();
+        when(userRepository.findByEmail("test@example.com")).thenReturn(java.util.Optional.of(user));
+        when(passwordEncoder.matches("plain-password", "encoded-password")).thenReturn(true);
+        when(jwtService.generateToken(user)).thenReturn("signed-token");
+
+        var result = authService.login(new UserLoginRequest("test@example.com", "plain-password"));
+
+        assertThat(result.accessToken()).isEqualTo("signed-token");
+    }
+
+    @Test
+    void loginRejectsWrongPassword() {
+        User user = User.builder().email("test@example.com").pass("encoded-password").build();
+        when(userRepository.findByEmail("test@example.com")).thenReturn(java.util.Optional.of(user));
+        when(passwordEncoder.matches("wrong-password", "encoded-password")).thenReturn(false);
+
+        assertThatThrownBy(() -> authService.login(new UserLoginRequest("test@example.com", "wrong-password")))
+                .isInstanceOf(ValidationException.class)
+                .hasMessage("invalide email or password");
+    }
+
+    @Test
+    void loginUsesSameErrorForUnknownEmail() {
+        when(userRepository.findByEmail("missing@example.com")).thenReturn(java.util.Optional.empty());
+
+        assertThatThrownBy(() -> authService.login(new UserLoginRequest("missing@example.com", "password")))
+                .isInstanceOf(ValidationException.class)
+                .hasMessage("invalide email or password");
     }
 }

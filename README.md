@@ -75,10 +75,12 @@ Interactive API documentation is available at `http://localhost:8080/swagger-ui.
 Run all unit and integration tests with:
 
 ```powershell
-mvn test
+mvn verify
 ```
 
-Unit tests cover JWT claim creation and authentication service behavior. The Spring Boot integration test exercises registration, password persistence, login, JWT authentication, and access to a protected API resource using an in-memory H2 database. It does not require PostgreSQL, Redis, or RabbitMQ.
+Unit tests cover authentication, JWT validation, user and workout services, training-slot rules and mappings, and booking lifecycle behavior. The Spring Boot integration test exercises registration, password persistence, login, JWT authentication, email validation, and access to a protected API resource using an in-memory H2 database. It does not require PostgreSQL, Redis, or RabbitMQ.
+
+The current suite contains 53 tests. The latest clean run passed all 53 with no failures or skips and reported 88.26% line coverage, 85.71% branch coverage, and 88.8% instruction coverage. JaCoCo generates an HTML report at `target/site/jacoco/index.html`; `mvn verify` enforces a minimum 80% line coverage for the full bundle.
 
 Run the API end-to-end authentication flow against a running application with:
 
@@ -96,14 +98,14 @@ Start the Compose stack, install k6, then run:
 k6 run load-tests/gym.js
 ```
 
-The script ramps through 10, 25, and 50 virtual users, requests the health and training-list endpoints, and enforces an error rate below 2%, p95 below 750 ms, and p99 below 1.5 seconds. Override the target with `BASE_URL`, for example:
+The script creates a client during setup, then ramps through 10, 25, and 50 virtual users issuing health checks and authenticated user-list requests. It enforces an error rate below 2%, p95 below 750 ms, and p99 below 1.5 seconds. Override the target with `BASE_URL`, for example:
 
 ```powershell
 $env:BASE_URL = 'http://localhost:8080'
 k6 run load-tests/gym.js
 ```
 
-This is an initial baseline workload rather than a capacity certification. It does not create bookings or exercise authentication, and its thresholds are starting SLOs. Increase the duration and VU stages gradually, include representative authenticated write traffic, and monitor database pool saturation and RabbitMQ queue depth before drawing capacity conclusions.
+This is an initial baseline workload rather than a capacity certification. It does not create bookings or load-test write operations, and its thresholds are starting SLOs. Increase the duration and VU stages gradually, include representative authenticated write traffic, and monitor database pool saturation and RabbitMQ queue depth before drawing capacity conclusions.
 
 ### Recorded local run
 

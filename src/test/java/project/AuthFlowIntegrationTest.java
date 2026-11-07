@@ -62,4 +62,15 @@ class AuthFlowIntegrationTest {
         mockMvc.perform(get("/api/users"))
                 .andExpect(status().isUnauthorized());
     }
+
+    @Test
+    void registrationRejectsMalformedEmail() throws Exception {
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"name":"Integration","last_name":"User","email":"not-an-email","pass":"strong-password"}
+                                """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.detail").isNotEmpty());
+    }
 }
