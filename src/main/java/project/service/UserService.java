@@ -2,6 +2,9 @@ package project.service;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +38,19 @@ public class UserService {
                 .map(this::toUserResponseDto)
                 .toList();
     }
+
+    //Pageable1
+    public Page<UserResponseDto> getUsers(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(this::toUserResponseDto);
+    }
+
+    //Pageable2
+    /*public Page<UserResponseDto> getUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return userRepository.findAll(pageable)
+                .map(this::toUserResponseDto);
+    }*/
 
     public UserResponseDto updateUser(User user) {
         userRepository.findById(user.getId())

@@ -36,6 +36,7 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).hasRole("ADMINISTRATOR")
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/admin/users").hasRole("ADMINISTRATOR")
                         .requestMatchers("/api/user/**").authenticated()
                         .requestMatchers("/api/booking/{id}/status").hasRole("ADMINISTRATOR")
                         .requestMatchers("/api/training/**").hasRole("ADMINISTRATOR")

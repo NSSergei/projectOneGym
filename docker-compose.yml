@@ -1,6 +1,8 @@
 services:
   app:
-    build: .
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+    image: finalimage
     container_name: FitnesApp
     env_file:
       - .env
