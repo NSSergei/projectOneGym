@@ -24,9 +24,9 @@ import project.messaging.BookingCreatedEvent;
 import project.security.user.CustomUserDetails;
 import project.service.BookingService;
 import project.service.BookingMetrics;
-import project.storage.booking.BookingRepository;
-import project.storage.trainingSlot.TrainingRepository;
-import project.storage.user.UserRepository;
+import project.repository.booking.BookingRepository;
+import project.repository.trainingSlot.TrainingRepository;
+import project.repository.user.UserRepository;
 
 import java.util.Optional;
 import java.util.List;

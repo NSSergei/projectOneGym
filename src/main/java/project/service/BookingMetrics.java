@@ -10,6 +10,9 @@ public class BookingMetrics {
     private final Counter cancelled;
     private final Counter rejected;
 
+    /**
+    * @param meterRegistry реестр метрик для регистрации метрик приложения
+     */
     public BookingMetrics(MeterRegistry meterRegistry) {
         this.created = Counter.builder("gym.bookings.created")
                 .description("Number of successfully created bookings")
@@ -22,14 +25,23 @@ public class BookingMetrics {
                 .register(meterRegistry);
     }
 
+    /**
+     * Учитывает создание записи на тренировку.
+     */
     public void recordCreated() {
         created.increment();
     }
 
+    /**
+     * Учитывает отмену записи на тренировку.
+     */
     public void recordCancelled() {
         cancelled.increment();
     }
 
+    /**
+     * Учитывает отклонённую запись на тренировку.
+     */
     public void recordRejected() {
         rejected.increment();
     }

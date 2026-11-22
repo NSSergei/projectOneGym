@@ -12,7 +12,7 @@ import project.exception.NotFoundException;
 import project.exception.ValidationException;
 import project.model.User;
 import project.service.UserService;
-import project.storage.user.UserRepository;
+import project.repository.user.UserRepository;
 
 import java.util.List;
 import java.util.Optional;

@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -12,11 +13,16 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import project.model.User;
 import project.security.user.CustomUserDetails;
 import project.service.JwtService;
-import project.storage.user.UserRepository;
+import project.repository.user.UserRepository;
 
 import java.io.IOException;
 
+/**
+ * Проверяет JWT из заголовка Authorization и устанавливает аутентификацию
+ * текущего пользователя в {@link SecurityContextHolder}.
+ */
 @Component
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserRepository userRepository;
@@ -26,6 +32,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
     }
+
+    /**
+     * Обрабатывает запрос: проверяет Bearer-токен, загружает пользователя
+     * и устанавливает его данные в контекст безопасности.
+     * Если токена нет, передаёт запрос дальше без аутентификации.
+     * При недействительном токене или отсутствии пользователя возвращает 401.
+     *
+     * @param request входящий HTTP-запрос
+     * @param response HTTP-ответ
+     * @param filterChain цепочка фильтров
+     * @throws ServletException если обработка запроса прерывается ошибкой сервлета
+     * @throws IOException если происходит ошибка ввода-вывода
+     */
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -51,6 +70,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //проверить пользователя по данному id
         User user = userRepository.findById(idToken).orElse(null);
         if (user == null) {
+            log.debug("Запрос отклонён: пользователь из JWT не найден, userId={}, path={}",
+                    idToken, request.getRequestURI());
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }

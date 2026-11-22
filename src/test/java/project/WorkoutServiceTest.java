@@ -5,12 +5,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import project.dto.WorkoutCreateRequest;
+import project.dto.WorkoutCreateRequestDto;
 import project.exception.NotFoundException;
 import project.exception.ValidationException;
 import project.model.Workout;
 import project.service.WorkoutService;
-import project.storage.workout.WorkoutRepository;
+import project.repository.workout.WorkoutRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +31,7 @@ class WorkoutServiceTest {
 
     @Test
     void createWorkoutMapsRequestAndPersistsIt() {
-        WorkoutCreateRequest request = new WorkoutCreateRequest("Strength", "Weights", 25);
+        WorkoutCreateRequestDto request = new WorkoutCreateRequestDto("Strength", "Weights", 25);
         when(workoutRepository.save(any(Workout.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Workout result = workoutService.createWorkout(request);

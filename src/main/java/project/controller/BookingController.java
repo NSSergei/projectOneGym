@@ -2,7 +2,7 @@
 
     import lombok.RequiredArgsConstructor;
     import org.springframework.web.bind.annotation.*;
-    import project.dto.BookingCreateRequest;
+    import project.dto.BookingCreateRequestDto;
     import project.dto.BookingResponseDto;
     import project.enums.BookingStatus;
     import project.model.Booking;
@@ -23,7 +23,7 @@
         }
 
         @PostMapping("/registration/{trainingSlotId}")
-        public BookingCreateRequest createBooking(@PathVariable long trainingSlotId) {
+        public BookingCreateRequestDto createBooking(@PathVariable long trainingSlotId) {
             return bookingService.registerForWorkout(trainingSlotId);
         }
 

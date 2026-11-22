@@ -8,11 +8,11 @@ import project.controller.BookingController;
 import project.controller.TrainingSlotController;
 import project.controller.UserController;
 import project.controller.WorkoutController;
-import project.dto.BookingCreateRequest;
+import project.dto.BookingCreateRequestDto;
 import project.dto.BookingResponseDto;
 import project.dto.TrainingResponseAllSlotsDto;
 import project.dto.UserResponseDto;
-import project.dto.WorkoutCreateRequest;
+import project.dto.WorkoutCreateRequestDto;
 import project.enums.BookingStatus;
 import project.enums.Role;
 import project.model.Booking;
@@ -47,7 +47,7 @@ class ControllerDelegationTest {
     void workoutControllerDelegatesEveryRoute() {
         WorkoutController controller = new WorkoutController(workoutService);
         Workout workout = new Workout("Yoga", "Mobility", 30);
-        WorkoutCreateRequest request = new WorkoutCreateRequest("Yoga", "Mobility", 30);
+        WorkoutCreateRequestDto request = new WorkoutCreateRequestDto("Yoga", "Mobility", 30);
         when(workoutService.createWorkout(request)).thenReturn(workout);
         when(workoutService.getAllWorkout()).thenReturn(List.of(workout));
         when(workoutService.getWorkoutById(4L)).thenReturn(workout);
@@ -107,7 +107,7 @@ class ControllerDelegationTest {
     void bookingControllerDelegatesEveryRoute() {
         BookingController controller = new BookingController(bookingService);
         Booking booking = new Booking();
-        BookingCreateRequest created = new BookingCreateRequest(20L, 7L, 11L, LocalDateTime.now());
+        BookingCreateRequestDto created = new BookingCreateRequestDto(20L, 7L, 11L, LocalDateTime.now());
         BookingResponseDto response = new BookingResponseDto(20L, 7L, 11L, BookingStatus.CREATED);
         when(bookingService.getAllBookings()).thenReturn(List.of(response));
         when(bookingService.registerForWorkout(11L)).thenReturn(created);

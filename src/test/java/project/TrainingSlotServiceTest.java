@@ -12,9 +12,9 @@ import project.model.TrainingSlot;
 import project.model.User;
 import project.model.Workout;
 import project.service.TrainingSlotService;
-import project.storage.trainingSlot.TrainingRepository;
-import project.storage.user.UserRepository;
-import project.storage.workout.WorkoutRepository;
+import project.repository.trainingSlot.TrainingRepository;
+import project.repository.user.UserRepository;
+import project.repository.workout.WorkoutRepository;
 
 import java.time.LocalTime;
 import java.util.List;

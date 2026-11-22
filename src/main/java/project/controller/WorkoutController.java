@@ -5,12 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.dto.WorkoutCreateRequest;
+import project.dto.WorkoutCreateRequestDto;
 import project.model.Workout;
 import project.service.WorkoutService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +18,7 @@ public class WorkoutController {
     private final WorkoutService workoutService;
 
     @PostMapping
-    public ResponseEntity<Workout> createWorkout(@Valid @RequestBody WorkoutCreateRequest workoutCreateRequest) {
+    public ResponseEntity<Workout> createWorkout(@Valid @RequestBody WorkoutCreateRequestDto workoutCreateRequest) {
         Workout response = workoutService.createWorkout(workoutCreateRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

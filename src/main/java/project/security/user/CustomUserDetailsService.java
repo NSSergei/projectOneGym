@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import project.model.User;
-import project.storage.user.UserRepository;
+import project.repository.user.UserRepository;
 
 @Service
 @RequiredArgsConstructor

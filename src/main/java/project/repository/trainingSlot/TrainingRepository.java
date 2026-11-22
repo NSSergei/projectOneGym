@@ -1,4 +1,4 @@
-package project.storage.trainingSlot;
+package project.repository.trainingSlot;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

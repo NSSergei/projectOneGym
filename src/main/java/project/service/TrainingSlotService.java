@@ -1,5 +1,6 @@
 package project.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import project.dto.TrainingResponseAllSlotsDto;
@@ -8,13 +9,14 @@ import project.exception.ValidationException;
 import project.model.TrainingSlot;
 import project.model.User;
 import project.model.Workout;
-import project.storage.trainingSlot.TrainingRepository;
-import project.storage.user.UserRepository;
-import project.storage.workout.WorkoutRepository;
+import project.repository.trainingSlot.TrainingRepository;
+import project.repository.user.UserRepository;
+import project.repository.workout.WorkoutRepository;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class TrainingSlotService {
     private final TrainingRepository trainingRepository;
     private final WorkoutRepository workoutRepository;
@@ -27,6 +29,11 @@ public class TrainingSlotService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Создание тренировочного слота
+     * @param trainingSlot данные создаваемого тренировочного слота
+     * @return возвращает сохраненный объект TrainingSlot
+     */
     public TrainingSlot createTraining(TrainingSlot trainingSlot) {
         User coach = userRepository.findById(trainingSlot.getCoach().getId())
                 .orElseThrow(() -> new ValidationException("Coach не существует"));
@@ -40,32 +47,71 @@ public class TrainingSlotService {
 
         trainingSlot.setCoach(coach);
         trainingSlot.setWorkout(workout);
-        return trainingRepository.save(trainingSlot);
+
+        TrainingSlot saved = trainingRepository.save(trainingSlot);
+        log.info("Тренировочный слот создан: slotId={}, coachId={}, workoutId={}",
+                saved.getId(), coach.getId(), workout.getId());
+
+        return saved;
     }
 
+    /**
+     * Получение слота по идентификатору
+     * @param id идентификатор записи
+     * @return получение результата поиска по идентификатору
+     */
     @Cacheable(value = "trainingSlot", key = "#id")
     public TrainingSlot getTrainingSlotById(Long id) {
-        return trainingRepository.findById(id)
+        TrainingSlot trainingSlot =  trainingRepository.findById(id)
                 .orElseThrow(() -> new ValidationException("TraininSlot с данным id не найдет:" + id));
+        log.info("training slot id:{}",trainingSlot.getId());
+
+        return trainingSlot;
     }
 
+    /**
+     * Обновление данных слота
+     * @param trainingSlot запись с обновлёнными данными
+     * @return обновлённая запись слота
+     */
     public TrainingSlot updateTrainingSlot(TrainingSlot trainingSlot) {
         trainingRepository.findById(trainingSlot.getId())
                 .orElseThrow(() -> new ValidationException("TraininSlot отсутствуте в BD"));
-        return trainingRepository.save(trainingSlot);
+
+        TrainingSlot saved = trainingRepository.save(trainingSlot);
+        log.info("Тренировочный слот обновлён: slotId={}", saved.getId());
+
+        return saved;
     }
 
+    /**
+     * Удаляет запись по её идентификатору.
+     * @param id идентификатор записи
+     */
     public void deleteTrainingSlotById(Long id) {
         trainingRepository.deleteById(id);
+        log.info("TrainingSlot was deleted id:{}",id);
     }
 
+    /**
+     * Получение все слотов
+     * @return список всех слотов в формате DTO
+     */
     public List<TrainingResponseAllSlotsDto> toTrainingResponseDtoList() {
-        return trainingRepository.findAll()
+        List<TrainingResponseAllSlotsDto> list = trainingRepository.findAll()
                 .stream()
                 .map(this::toTrainingResponseDto)
                 .toList();
+
+        log.debug("TrainingResponseDtoList size is{}",list.size());
+        return list;
     }
 
+    /**
+     * Преобразует запись слотов в DTO
+     * @param trainingSlot запись для преобразования в DTO
+     * @return запись преобразовання в DTO
+     */
     public TrainingResponseAllSlotsDto toTrainingResponseDto(TrainingSlot trainingSlot) {
         return new TrainingResponseAllSlotsDto(
                 trainingSlot.getId(),

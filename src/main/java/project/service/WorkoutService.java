@@ -1,20 +1,21 @@
 package project.service;
 
-import org.hibernate.sql.Update;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
-import project.dto.WorkoutCreateRequest;
+import project.dto.WorkoutCreateRequestDto;
 import project.exception.NotFoundException;
 import project.exception.ValidationException;
 import project.model.Workout;
-import project.storage.workout.WorkoutRepository;
+import project.repository.workout.WorkoutRepository;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class WorkoutService {
     private final WorkoutRepository workoutRepository;
 
@@ -22,22 +23,47 @@ public class WorkoutService {
         this.workoutRepository = workoutRepository;
     }
 
+    /**
+     * Создание тренировки
+     * @param workoutCreateRequestDto DTO данные создоваемой тренировки
+     * @return возвращение сохраненного объекта
+     */
     @CacheEvict(value = {"workout", "workouts"}, allEntries = true)
-    public Workout createWorkout(WorkoutCreateRequest workoutCreateRequest) {
-        return workoutRepository.save(toMaptoWorkout(workoutCreateRequest));
+    public Workout createWorkout(WorkoutCreateRequestDto workoutCreateRequestDto) {
+        Workout workout = workoutRepository.save(toMaptoWorkout(workoutCreateRequestDto));
+        log.info("workout was created id:{}", workout.getId());
+        return workout;
     }
 
+    /**
+     * Получение списка тренировок
+     * @return список тренировок
+     */
     @Cacheable(value = "workouts")
     public List<Workout> getAllWorkout() {
-        return workoutRepository.findAll();
+        List<Workout> lst =  workoutRepository.findAll();
+        log.debug("Workouts lst size is{}", lst.size());
+        return lst;
     }
 
+    /**
+     * Получение тренировки по идентификатору
+     * @param id идентификатор тренировки
+     * @return результат поиска
+     */
     @Cacheable(value = "workout", key = "#id")
     public Workout getWorkoutById(long id) {
-        return workoutRepository.findById(id)
+        Workout workout = workoutRepository.findById(id)
                 .orElseThrow(() -> new ValidationException("Workout with id=" + id + " not found"));
+        log.debug("workout was find id:{}",workout.getId());
+        return workout;
     }
 
+    /**
+     * Обновление тренировки
+     * @param workout запись с обновленными данными
+     * @return обновленная запись
+     */
     @Caching(
             put = @CachePut(value = "workout", key = "#workout.id"),
             evict = @CacheEvict(value = "workouts", allEntries = true)
@@ -45,9 +71,17 @@ public class WorkoutService {
     public Workout updateWorkout(Workout workout) {
         workoutRepository.findById(workout.getId())
                 .orElseThrow(() -> new NotFoundException("Workout not found"));
-        return workoutRepository.save(workout);
+
+        Workout savedWorkout = workoutRepository.save(workout);
+        log.info("Тренировка обновлена: workoutId={}", savedWorkout.getId());
+
+        return savedWorkout;
     }
 
+    /**
+     * Удаление тренировки по идентификатору
+     * @param id идентификатор записи
+     */
     @Caching(evict = {
             @CacheEvict(value = "workout", key = "#id"),
             @CacheEvict(value = "workouts", allEntries = true)
@@ -56,11 +90,16 @@ public class WorkoutService {
     public void deleteWorkoutById(long id) {
         workoutRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Workout with id=" + id + " not found"));
-
         workoutRepository.deleteById(id);
+        log.info("workout was delete id:{}", id);
     }
 
-    public Workout toMaptoWorkout(WorkoutCreateRequest request) {
+    /**
+     * Преобразование DTO в Workout
+     * @param request объект DTO
+     * @return объект Workout
+     */
+    public Workout toMaptoWorkout(WorkoutCreateRequestDto request) {
         return new Workout(request.name(), request.description(),
                 request.price());
     }

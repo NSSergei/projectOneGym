@@ -32,7 +32,7 @@ public class AdminController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
 
-        return userService.getUsers(page, size);*/
-    }
+        return userService.getUsers(page, size);
+    }*/
 }
 

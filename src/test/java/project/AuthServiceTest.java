@@ -6,14 +6,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import project.dto.UserCreateRequest;
-import project.dto.UserLoginRequest;
+import project.dto.UserCreateRequestDto;
+import project.dto.UserLoginRequestDto;
 import project.enums.Role;
 import project.exception.ValidationException;
 import project.model.User;
 import project.service.AuthService;
 import project.service.JwtService;
-import project.storage.user.UserRepository;
+import project.repository.user.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -34,7 +34,7 @@ class AuthServiceTest {
 
     @Test
     void registerStoresEncodedPasswordAndReturnsToken() {
-        UserCreateRequest request = new UserCreateRequest("Test", "User", "test@example.com", "plain-password");
+        UserCreateRequestDto request = new UserCreateRequestDto("Test", "User", "test@example.com", "plain-password");
         when(userRepository.existsByEmail(request.email())).thenReturn(false);
         when(passwordEncoder.encode(request.pass())).thenReturn("encoded-password");
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
@@ -53,7 +53,7 @@ class AuthServiceTest {
 
     @Test
     void registerRejectsAnExistingEmail() {
-        UserCreateRequest request = new UserCreateRequest("Test", "User", "test@example.com", "plain-password");
+        UserCreateRequestDto request = new UserCreateRequestDto("Test", "User", "test@example.com", "plain-password");
         when(userRepository.existsByEmail(request.email())).thenReturn(true);
 
         assertThatThrownBy(() -> authService.register(request))
@@ -67,7 +67,7 @@ class AuthServiceTest {
         when(passwordEncoder.matches("plain-password", "encoded-password")).thenReturn(true);
         when(jwtService.generateToken(user)).thenReturn("signed-token");
 
-        var result = authService.login(new UserLoginRequest("test@example.com", "plain-password"));
+        var result = authService.login(new UserLoginRequestDto("test@example.com", "plain-password"));
 
         assertThat(result.accessToken()).isEqualTo("signed-token");
     }
@@ -78,7 +78,7 @@ class AuthServiceTest {
         when(userRepository.findByEmail("test@example.com")).thenReturn(java.util.Optional.of(user));
         when(passwordEncoder.matches("wrong-password", "encoded-password")).thenReturn(false);
 
-        assertThatThrownBy(() -> authService.login(new UserLoginRequest("test@example.com", "wrong-password")))
+        assertThatThrownBy(() -> authService.login(new UserLoginRequestDto("test@example.com", "wrong-password")))
                 .isInstanceOf(ValidationException.class)
                 .hasMessage("invalide email or password");
     }
@@ -87,7 +87,7 @@ class AuthServiceTest {
     void loginUsesSameErrorForUnknownEmail() {
         when(userRepository.findByEmail("missing@example.com")).thenReturn(java.util.Optional.empty());
 
-        assertThatThrownBy(() -> authService.login(new UserLoginRequest("missing@example.com", "password")))
+        assertThatThrownBy(() -> authService.login(new UserLoginRequestDto("missing@example.com", "password")))
                 .isInstanceOf(ValidationException.class)
                 .hasMessage("invalide email or password");
     }

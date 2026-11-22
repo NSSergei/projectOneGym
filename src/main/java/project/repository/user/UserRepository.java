@@ -1,4 +1,4 @@
-    package project.storage.user;
+    package project.repository.user;
 
     import org.springframework.data.jpa.repository.JpaRepository;
 
